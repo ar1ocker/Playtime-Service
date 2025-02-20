@@ -1,0 +1,67 @@
+services:
+  web:
+    image: nginx:latest
+    ports:
+      - "80:80"
+    volumes:
+      - static:/var/html/static
+    group_add:
+      - 110 # для чтения статики из сервиса playtime
+    depends_on:
+      - playtime
+    restart: always
+    networks:
+      - to-wan-network
+    configs:
+      - source: nginx
+        target: /etc/nginx/conf.d/default.conf
+  playtime:
+    build: ./playtime_service/
+    command: "gunicorn --workers=2 settings.wsgi --bind 0:8000"
+    volumes:
+      - static:/app/static
+    group_add:
+      - 110 # Для чтения статики сервисом web
+    depends_on:
+      db:
+        # ждём запуска бд
+        condition: service_healthy
+    restart: always
+    networks:
+      - only-lan-network
+      - to-wan-network
+    configs:
+      - source: playtime
+        target: /app/config.toml
+    env_file:
+      - ./configs/postgres/postgres.env
+  db:
+    image: postgres:17-bookworm
+    volumes:
+      - database:/var/lib/postgresql/data
+    # Для того, чтобы не добавлять sleep или wait-for-it в сервис playtime для ожидания полноценного запуска бд
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U postgres"]
+      interval: 5s
+      timeout: 5s
+      retries: 5
+    restart: always
+    networks:
+      - only-lan-network
+    env_file:
+      - ./configs/postgres/postgres.env
+
+volumes:
+  database:
+  static:
+
+networks:
+  to-wan-network:
+  only-lan-network:
+
+configs:
+  playtime:
+    file: ./configs/playtime/config.toml
+  nginx:
+    file: ./configs/nginx/default.conf
+

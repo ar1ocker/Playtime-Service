@@ -1,0 +1,23 @@
+[DJANGO]
+DEBUG = false
+ALLOWED_HOSTS = ["*"]
+SECRET_KEY = ""
+LANGUAGE_CODE = "ru"
+TIME_ZONE = "UTC"
+
+[HMAC]
+ENABLE = true
+TIMESTAMP_DEVIATION = 10
+
+[POSTGRES]
+DATABASE_NAME = "postgres"
+USER = "postgres"
+PASSWORD = "password"
+PORT = "5432"
+HOST = "db"
+CONN_MAX_AGE = 30
+CONN_HEALTH_CHECKS = true
+
+[STEAM]
+KEY = ""
+TIMEOUT = 5
