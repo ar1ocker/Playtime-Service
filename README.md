@@ -6,6 +6,7 @@
 Сервис самостоятельно получает игровое время указанное в Steam через официальный API при запросе
 
 API ручки:
+
 ```http://your-site.ru/get-playtime/<str:path>/```
 
 ```http://your-site.ru/set-playtime/bm/<str:path>/```
