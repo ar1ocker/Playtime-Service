@@ -28,3 +28,29 @@ HMAC проверяется на обоих API, разница лишь в то
 + Копируем и переименовываем configs/postgres/postgres-example.env в configs/postgres/postgres.env
 + Вводим пароль от Postgres, такой же как и до этого
 + `docker compose up -d`
+
+## Запросы
+
+От Battlemetrics Webhook должен быть вот такого вида
+
+```json
+{
+  "steam_id": "{{player.steamID}}",
+  "playtime": "{{player.game.timePlayed}}",
+  "game_id": 393380
+}
+```
+
+Ключ для HMAC вам также даст сам Battlemetrics при вводе Webhook
+
+От скриптов запрос должен быть вот такого вида
+
+```json
+{
+  "steam_ids": ["7600000000000123", "7600000000000123", "7600000000000123"],
+  "game_id": 393380,
+  "is_need_update": false
+}
+```
+
+is_need_update - опционален, время из Steam будет запрашиваться в двух случаях, когда is_need_update == True или когда Steam ID не найден
