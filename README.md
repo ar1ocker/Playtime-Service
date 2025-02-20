@@ -7,9 +7,10 @@
 
 API ручки:
 ```http://your-site.ru/get-playtime/<str:path>/```
+
 ```http://your-site.ru/set-playtime/bm/<str:path>/```
 
-Где <path> это взятый из базы путь для которого установлен HMAC ключ
+Где \<path\> это взятый из базы путь для которого установлен HMAC ключ
 
 ![изображение](https://github.com/user-attachments/assets/a2c3d8b9-06df-40cf-8c56-fb29db063001)
 ![изображение](https://github.com/user-attachments/assets/113a3a73-4d0d-47f9-91ef-f31d7edcff75)
