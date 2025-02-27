@@ -30,7 +30,13 @@ class PlaytimeAdmin(admin.ModelAdmin):
     ]
     list_display_links = list_display
     search_fields = ["steam_id", "game_id"]
-    list_filter = ["created_at", "updated_at"]
+    list_filter = [
+        "game_id",
+        "created_at",
+        "updated_at",
+        ("steam_playtime", admin.EmptyFieldListFilter),
+        ("bm_playtime", admin.EmptyFieldListFilter),
+    ]
     sortable_by = ["id", "game_id", "created_at", "updated_at", "get_steam_playtime_hours", "get_bm_playtime_hours"]
 
     @admin.display(description="Игровое время по Steam (часы)")

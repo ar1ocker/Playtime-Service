@@ -46,6 +46,9 @@ class BattleMetricsPlaytimeUpdateApi(APIView):
         if settings.ENABLE_HMAC_VALIDATION:
             validator.validate_hmac(request=request)
 
+        if battlemetrics_path.fixed_game_id is not None:
+            request.data["game_id"] = battlemetrics_path.fixed_game_id
+
         serializer = self.InputSerializer(data=request.data)
         serializer.is_valid(raise_exception=True)
 
@@ -89,6 +92,9 @@ class PlaytimeGetApi(APIView):
 
         if settings.ENABLE_HMAC_VALIDATION:
             validator.validate_hmac(request=request)
+
+        if playtime_path.fixed_game_id is not None:
+            request.data["game_id"] = playtime_path.fixed_game_id
 
         serializer = self.InputSerializer(data=request.data)
         serializer.is_valid(raise_exception=True)

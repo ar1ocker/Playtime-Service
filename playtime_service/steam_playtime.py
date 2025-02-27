@@ -57,9 +57,11 @@ class SteamConnectAsync:
                 data = await response.json()
 
                 return data["response"]["games"]
-        except (aiohttp.ClientError, KeyError) as e:
+        except aiohttp.ClientError as e:
             logging.error(f"Ошибка при получении списка последних сыгранных игр у пользователя {steam_id}, ошибка: {e}")
             return None
+        except KeyError as e:
+            logging.error(f"У пользователя {steam_id} не найдены игры. KeyError {e}")
 
     async def get_owned_games(self, *, steam_id):
         params = {"steamid": steam_id, "include_appinfo": "true", "key": self.api_key}
@@ -69,16 +71,18 @@ class SteamConnectAsync:
                 if response.status != 200:
                     logging.warning(
                         f"Неверный статус код при получении списка игр у пользователя {steam_id},"
-                        " статус код {response.status}"
+                        f" статус код {response.status}"
                     )
                     return None
 
                 data = await response.json()
 
                 return data["response"]["games"]
-        except (aiohttp.ClientError, KeyError) as e:
+        except aiohttp.ClientError as e:
             logging.error(f"Ошибка при получении списка игр у пользователя {steam_id}, ошибка: {e}")
             return None
+        except KeyError as e:
+            logging.error(f"У пользователя {steam_id} не найдены игры. KeyError {e}")
 
     async def get_player_data(self, *, steam_id: str) -> dict[str, str | int | float] | None:
         try:
