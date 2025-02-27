@@ -54,3 +54,12 @@ HMAC проверяется на обоих API, разница лишь в то
 ```
 
 is_need_update - опционален, время из Steam будет запрашиваться в двух случаях, когда is_need_update == True или когда Steam ID не найден
+game_id - опционален если он установлен в "Подключения скриптов" или "Подключения Battlemetrics"
+
+# Разработка
+
+Compose с автоматической перезагрузкой при изменениях в коде
+
+```sh
+sudo docker compose -f docker-compose-dev.yml up --watch
+```
