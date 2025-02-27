@@ -1,29 +1,19 @@
-name: playtime-service
+name: playtime-service-dev
 
 services:
-  web:
-    image: nginx:latest
-    ports:
-      - "80:80"
-    volumes:
-      - static:/var/html/static
-    group_add:
-      - 110 # для чтения статики из сервиса playtime
-    depends_on:
-      - playtime
-    restart: always
-    networks:
-      - to-wan-network
-    configs:
-      - source: nginx
-        target: /etc/nginx/conf.d/default.conf
   playtime:
     build: ./playtime_service/
-    command: "gunicorn --workers=2 settings.wsgi --bind 0:8000"
+    command: "sh -c 'pip3 install debugpy -t /tmp && python3 manage.py migrate --noinput && python3 /tmp/debugpy --wait-for-client --listen 0.0.0.0:5678 manage.py runserver 0.0.0.0:8000 --insecure'"
+    ports:
+      - "8000:8000"
+      - "5678:5678"
+    develop:
+      watch:
+        - path: ./playtime_service
+          target: /app
+          action: sync
     volumes:
       - static:/app/static
-    group_add:
-      - 110 # Для чтения статики сервисом web
     depends_on:
       db:
         # ждём запуска бд
