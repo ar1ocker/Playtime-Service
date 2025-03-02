@@ -62,6 +62,10 @@ class SteamConnectAsync:
             return None
         except KeyError as e:
             logging.error(f"У пользователя {steam_id} не найдены игры. KeyError {e}")
+            return None
+        except asyncio.TimeoutError as e:
+            logging.error(f"Таймаут при запросе последних игр у пользователя {steam_id}, TimeoutError {e}")
+            return None
 
     async def get_owned_games(self, *, steam_id):
         params = {"steamid": steam_id, "include_appinfo": "true", "key": self.api_key}
@@ -83,6 +87,10 @@ class SteamConnectAsync:
             return None
         except KeyError as e:
             logging.error(f"У пользователя {steam_id} не найдены игры. KeyError {e}")
+            return None
+        except asyncio.TimeoutError as e:
+            logging.error(f"Таймаут при запросе списка игр у пользователя {steam_id}, TimeoutError {e}")
+            return None
 
     async def get_player_data(self, *, steam_id: str) -> dict[str, str | int | float] | None:
         try:
@@ -116,7 +124,10 @@ class SteamConnectAsync:
                     ret_data.extend((await response.json())["response"]["players"]["player"])
 
             except (aiohttp.ClientError, KeyError, IndexError) as e:
-                logging.error(f"Ошибка при получении пользователях {steam_ids}, ошибка: {type(e)} {e}")
+                logging.error(f"Ошибка при получении информации о пользователях {steam_ids}, ошибка: {type(e)} {e}")
+                return None
+            except asyncio.TimeoutError as e:
+                logging.error(f"Таймаут при запросе информации о пользователях {steam_ids}, TimeoutError {e}")
                 return None
 
         return ret_data
