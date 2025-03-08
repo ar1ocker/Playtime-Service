@@ -35,8 +35,6 @@ services:
     configs:
       - source: playtime
         target: /app/config.toml
-    env_file:
-      - ./configs/postgres/postgres.env
   db:
     image: postgres:17-bookworm
     volumes:
