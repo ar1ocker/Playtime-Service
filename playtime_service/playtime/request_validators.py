@@ -139,7 +139,7 @@ class TimestampRequestHMACValidator(DefaultRequestHMACValidator):
         super().__init__(header=header, signature_regex=signature_regex, secret_key=secret_key, hash_type=hash_type)
 
         self.hmac_timestamp_regex = timestamp_regex
-        self.hmac_timestamp_deviation: timedelta = timedelta(abs(timestamp_deviation))
+        self.hmac_timestamp_deviation: timedelta = timedelta(seconds=timestamp_deviation)
 
     def _generate_signature_from_request(self, *, request: Request) -> str:
         now: datetime = datetime.now(timezone.utc)
